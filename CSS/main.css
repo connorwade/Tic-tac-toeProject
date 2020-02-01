@@ -11,11 +11,46 @@ body, html {
 
 body {
   font-size: 15px;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.module {
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+  height: 100vh;
+  width: 100vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  padding: 8px;
+}
+
+.module .module-content {
+  text-align: center;
+  position: relative;
+  top: 75%;
+}
+
+.module .module-content h1 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.closed {
+  display: none;
 }
 
 main {
   height: 100%;
   width: 100%;
+  max-height: 500px;
+  border-radius: 10px;
+  background-color: aqua;
   display: -ms-grid;
   display: grid;
   -ms-grid-rows: (1fr)[3];
@@ -37,10 +72,13 @@ main div {
       -ms-flex-pack: center;
           justify-content: center;
   border: 1px solid black;
+  border-radius: 5px;
+  -webkit-transition: .5s;
+  transition: .5s;
 }
 
-main div:hover {
-  background-color: #E0E0E0;
+main div:active {
+  font-size: 1rem;
 }
 
 main:nth-child(n) {
@@ -86,5 +124,24 @@ main:nth-child(n) {
 main:nth-child(n) {
   grid-area: "9";
   border: 3px solid black;
+}
+
+button {
+  padding: 12px 24px;
+  border-radius: 15px;
+  background-color: lightgreen;
+  color: white;
+  border: 2px solid green;
+  -webkit-transition: .5s;
+  transition: .5s;
+  margin: 12px;
+}
+
+button:hover {
+  background-color: green;
+}
+
+button:active {
+  font-size: 1.2rem;
 }
 /*# sourceMappingURL=main.css.map */

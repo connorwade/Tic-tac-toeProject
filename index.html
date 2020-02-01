@@ -8,6 +8,22 @@
     <title>Tic-Tac-Toe</title>
 </head>
 <body>
+  <section class="module" id="module">
+    <!-- <div class="module-content login">
+      <h1>Choose Player ID</h1>
+      <input type="text" placeholder="Up to 16 characters" id="playerId">
+      <button id="submit-player">Submit</button>
+    </div> -->
+    <div class="module-content restart closed" id = "restart-module">
+      <h1 id = "game-over-text"></h1>
+      <button id = "restart">Restart</button>
+    </div>
+    <div class="module-content choose" id = "selection-module">
+      <h1>Select your mark!</h1>
+      <button id = "X">Select X</button>
+      <button id = "O">Select O</button>
+    </div>
+  </section>
         <main id="board">
           <div class="square" id="0" data-mark="" data-row = "0" data-col = "0"></div>
           <div class="square" id="1" data-mark="" data-row = "0" data-col = "1"></div>

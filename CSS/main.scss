@@ -12,11 +12,43 @@ body, html{
 
 body{
   font-size: 15px;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.module{
+  position: absolute;
+  background-color: rgba(0,0,0,.7);
+  z-index: 1;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  // align-items: center;
+  justify-content: center;
+  padding: 8px;
+  
+
+  .module-content{
+    text-align: center;
+    position: relative;
+    top: 75%;
+    h1{
+      text-align: center;
+      margin-bottom: 24px;
+    }
+  }
+}
+
+.closed{
+  display: none;
 }
 
 main{
   height: 100%;
   width: 100%;
+  max-height: 500px;
+  border-radius: 10px;
+  background-color: aqua;
   display: grid;
   grid-template-rows: repeat(3, 1fr);
   grid-template-columns: repeat(3, 1fr);
@@ -28,9 +60,15 @@ main{
     align-items: center;
     justify-content: center;
     border: 1px solid black;
-    &:hover{
-      background-color: #E0E0E0;
+    border-radius: 5px;
+    transition: .5s;
+    // &:hover{
+    //   background-color: #E0E0E0;
+    // }
+    &:active{
+      font-size: 1rem;
     }
+
   }
 }
 
@@ -38,5 +76,22 @@ main{
   main:nth-child(n){
     grid-area: $area;  
     border: 3px solid black;
+  }
+}
+
+button{
+  padding: 12px 24px;
+  border-radius: 15px;
+  background-color: lightgreen;
+  color: white;
+  border: 2px solid green;
+  transition: .5s;
+  margin: 12px;
+
+  &:hover{
+    background-color: green;
+  }
+  &:active{
+    font-size: 1.2rem;
   }
 }

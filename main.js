@@ -1,276 +1,290 @@
-let board = [
-    ['', '', ''],
-    ['', '', ''],
-    ['', '', ''],
-];
+//Variables
 
-const squares = document.getElementsByClassName('square');
+//module
+const module = document.getElementById('module');
+//restart
+const gameOverText = document.getElementById('game-over-text')
+const restartBtn = document.getElementById('restart');
+const restartMod = document.getElementById('restart-module');
+//newGame
+const selectX = document.getElementById('X');
+const selectO = document.getElementById('O');
+const selectMod = document.getElementById('selection-module');
+
+//game
 let gameOver = null;
+let turn = 0;
 
-let domBoard = [
-    [squares[0], squares[1], squares[2]],
-    [squares[3], squares[4], squares[5]],
-    [squares[6], squares[7], squares[8]],
+//ai & player
+let playerMark, aiMark, scores;
+let currentPlayerMark = 'X';
+
+
+
+//board
+const squares = document.getElementsByClassName('square');
+let board = [
+  ['', '', ''],
+  ['', '', ''],
+  ['', '', '']
+]
+let DOMboard = [
+  [squares[0], squares[1], squares[2]],
+  [squares[3], squares[4], squares[5]],
+  [squares[6], squares[7], squares[8]]
 ]
 
-for(let i = 0; i < squares.length; i++){
-    let square = squares[i];
-    square.addEventListener('click', (e)=>{handleClick(e.target)}, {once: 'true'});
-  }
+//events
+//square being clicked
+for (let i = 0; i < squares.length; i++) {
+  let square = squares[i];
+  square.addEventListener(
+    "click",
+    e => {
+      squareClick(e.target);
+    }
+  );
+} 
 
-  function handleClick(targetedEl) {
-      if(targetedEl.dataset.mark === '' && gameOver === null){
-            targetedEl.innerText = human;
-            targetedEl.dataset.mark = human;
-            updateGameState();
+//restart
+restartBtn.addEventListener('click', () => {
+  restart();
+});
+
+//select buttons
+selectX.addEventListener('click', ()=>{
+  selectMark(selectX.id);
+});
+
+selectO.addEventListener('click', ()=>{
+  selectMark(selectO.id);
+});
+
+//functions
+
+function squareClick(targetedEl){
+  if (targetedEl.dataset.mark === "" && gameOver === null) {
+      updateSquares(parseInt(targetedEl.id), currentPlayerMark);
+    }
+}
+
+function updateSquares(id, currentMark){
+  squares[id].dataset.mark = currentMark;
+  squares[id].innerText = currentMark;
+  board[squares[id].dataset.row][squares[id].dataset.col] = currentMark;  
+  endTurn();
+}
+
+function endTurn(){
+  currentPlayerMark = currentPlayerMark === 'X' ? 'O' : 'X';
+  gameOver = checkWinner();
+  if(!gameOver && currentPlayerMark === aiMark) {
+    //let coord = selectMove();
+    let coord = bestMove();
+    aiMakesTurn(coord);
+  } else if(gameOver) {
+    endGame();
+  }
+  turn++;
+}
+
+function aiMakesTurn(obj){
+  let el = DOMboard[obj.i][obj.j];
+  let elId = parseInt(el.id);
+  updateSquares(elId, currentPlayerMark);
+}
+
+function bestMove() {
+  // AI to make its turn
+  let bestScore = -Infinity;
+  let move;
+  let simulatedBoard = board;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      // Is the spot available?
+      if (simulatedBoard[i][j] === '') {
+        simulatedBoard[i][j] = currentPlayerMark;
+        //let score = minimax(simulatedBoard, 0, false);
+        let score = minimax(simulatedBoard, 9-turn, -Infinity, Infinity, false);
+        simulatedBoard[i][j] = '';
+        if (score > bestScore) {
+          bestScore = score;
+          move = { i, j };
+        }
       }
-  }
-
-  function reset() {
-      domBoard.forEach(row => 
-        {row.forEach(el => {
-            el.dataset.mark = '';
-            el.innerText = '';
-      })
-    });
-    board.forEach( row => {
-        row = ['','',''];
-    });
-    console.log(board);
-  }
-
-  function updateGameState(){
-      
-    board = [
-        [squares[0].dataset.mark, squares[1].dataset.mark, squares[2].dataset.mark],
-        [squares[3].dataset.mark, squares[4].dataset.mark, squares[5].dataset.mark],
-        [squares[6].dataset.mark, squares[7].dataset.mark, squares[8].dataset.mark]
-    ];
-
-    gameOver = checkWinner();
-
-    if(gameOver === null) {
-        currentPlayer = ai;
-        bestMove();
-    } else {
-        console.log(`Looks like ${gameOver} wins!`)
-        reset();
     }
   }
+  return move;
+}
 
-let w;
-let h;
+function minimax(board, depth, a, b, isMaximizing) {
+  let result = checkWinner();
+  if (depth === 0 || result !== null) {
+    return scores[result];
+  }
 
-let ai = 'X';
-let human = 'O';
-let currentPlayer = human;
+  if (isMaximizing) {
+    let bestScore = -Infinity;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        // Is the spot available?
+        if (board[i][j] === "") {
+          board[i][j] = aiMark;
+          let score = minimax(board, depth - 1, a, b, false);
+          board[i][j] = "";
+          bestScore = Math.max(score, bestScore);
+          a = Math.max(a, bestScore);
+          if(a >= b) {break;}
+        }
+      }
+    }
+    return bestScore;
+  } else {
+    let bestScore = Infinity;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        // Is the spot available?
+        if (board[i][j] === "") {
+          board[i][j] = playerMark;
+          let score = minimax(board, depth - 1, a, b, true);
+          board[i][j] = "";
+          bestScore = Math.min(score, bestScore);
+          b = Math.min(b, bestScore);
+          if(a >= b) {break;}
+        }
+      }
+    }
+    return bestScore;
+  }
+}
 
-// function setup() {
-//     createCanvas(400,400);
-//     w = width / 3;
-//     h = height / 3;
-//     bestMove();
-// }
+
+function selectMove() {
+  let available = availableMoves();
+  return available[Math.floor(Math.random() * available.length)];
+}
+
+function availableMoves() {
+  let availArr = [];
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (board[i][j] === "") {
+        availArr.push({ i, j });
+      }
+    }
+  }
+  return availArr;
+}
 
 function equals3(a, b, c) {
-    return a == b && b == c && a !== '';
+  return a == b && b == c && a !== "";
 }
 
 function checkWinner() {
-    let winner = null;
+  let winner = null;
 
-    //horizontal
-    for (let i = 0; i < 3; i++) {
-        if (equals3(board[i][0], board[i][1], board[i][2])) {
-            winner = board[i][0];
-        }
+  //horizontal
+  for (let i = 0; i < 3; i++) {
+    if (
+      equals3(
+        board[i][0],
+        board[i][1],
+        board[i][2]
+      )
+    ) {
+      winner = board[i][0];
     }
+  }
 
-    //vertical
-    for (let i = 0; i < 3; i++) {
-        if (equals3(board[0][i], board[1][i], board[2][i])) {
-            winner = board[0][i];
-        }
+  //vertical
+  for (let i = 0; i < 3; i++) {
+    if (
+      equals3(
+        board[0][i],
+        board[1][i],
+        board[2][i]
+      )
+    ) {
+      winner = board[0][i];
     }
+  }
 
-    //diagonal
-    if (equals3(board[0][0], board[1][1], board[2][2])) {
-        winner = board[0][0];
-    }
-    if (equals3(board[2][0], board[1][1], board[0][2])) {
-        winner = board[2][0];
-    }
+  //diagonal
+  if (
+    equals3(board[0][0], board[1][1], board[2][2])
+  ) {
+    winner = board[0][0];
+  }
+  if (
+    equals3(board[2][0], board[1][1], board[0][2])
+  ) {
+    winner = board[2][0];
+  }
 
-    let openSpots = 0;
-    for (let i = 0; i < 3; i++){
-        for(let j = 0; j < 3; j++) {
-            if(board[i][j] == '') {
-                openSpots++;
-            }
-        }
+  let openSpots = 0;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (board[i][j] == "") {
+        openSpots++;
+      }
     }
+  }
 
-    if (winner === null && openSpots === 0) {
-        return 'tie';
-    } else {
-        return winner;
-    }
+  if (openSpots === 0 && winner === null) {
+    return "tie";
+  } else {
+    return winner;
+  }
 }
 
-// function mousePress() {
-//     if(currentPlayer === human) {
-//         let i = floor(mouseX / w);
-//         let j = floor(mouseY / h);
+function endGame() {
+  if(gameOver !== 'tie'){
+    gameOverText.innerText = `Ah, dip! Looks like ${gameOver} wins!`; 
+  } else{
+    gameOverText.innerText = `Congrats on the tie, you mediocre beast!`;
+  }
+  module.classList.toggle('closed');
+  restartMod.classList.toggle('closed');
+}
 
-//         if(board[i][j] === '') {
-//             board[i][j] = human;
-//             currentPlayer = ai;
-//             bestMove();
-//         }
-//     }
-// }
-
-// function draw() {
-//     background(255);
-//     strokeweight(4);
-
-//     line(w, 0, w, height);
-//     line(w * 2, 0, w * 2, height);
-//     line(0, h, width, h);
-//     line(0, h * 2, width, h * 2);
-
-//     for (let i = 0; i < 3; i++) {
-//         for (let j = 0; j < 3; j++) {
-//             let x = w * i + w / 2;
-//             let y = h * j + h / 2;
-//             let spot = board[i][j];
-//             textSize(32);
-//             let r = w / 4;
-//             if(spot === human) {
-//                 noFill();
-//                 ellipse(x, y, r*2);
-//             } else if (spot === ai) {
-//                 line(x - r, y - r, x + r, y + r);
-//                 line(x + r, y - r, x - r, y + r);
-
-//             }
-//         }
-//     }
-
-//     let result = checkWinner();
-//     if (result !== null) {
-//         noLoop();
-//         let resultP = createP('');
-//         resultP.style('font-size', '32pt');
-//         if (result === 'tie') {
-//             resultP.html('Tie!');
-//         } else {
-//             resultP.html(`${result} wins!`)
-//         }
-//     }
-
-// }
-
-// function bestMove() {
-//     //AI to make its turn
-//     let bestScore = -Infinity;
-//     let move;
-//     for (let i = 0; i < 3; i++) {
-//         for (let j = 0; j < 3; j++){
-//             // Is the spot available?
-//             if (board[i][j] === '') {
-//                 board[i][j] = ai;
-//                 let score = minimax(board, 0, false);
-//                 console.log(score);
-//                 board[i][j] = '';
-//                 if (score > bestScore) {
-//                     bestScore = score;
-//                     console.log(bestScore);
-//                     move = { i, j };
-//                 }
-//             }
-//             board[move.i][move.j] = ai;
-//             domBoard[move.i][move.j].dataset.mark = ai;
-//             domBoard[move.i][move.j].innerText = ai;
-//         }
-//     }
-//     currentPlayer = human;
-// }
-
-// let scores = {
-//     'X' : 1,
-//     'O' : -1,
-//     'tie' : 0
-// }
-
-// function minimax(board, depth, isMaximizing) {
-//     let result = checkWinner();
-//     if (result !== null){
-//         return scores[result];
-//     }
-
-//     if (isMaximizing) {
-//         let bestScore = -Infinity;
-//         for (let i = 0; i < 3; i++) {
-//             for (let j = 0; j < 3; j++){
-//                 // Is the spot available?
-//                 if (board[i][j] == '') {
-//                     board[i][j] = ai;
-//                     let score = minimax(board, depth + 1, false);
-//                     board[i][j] = '';
-//                     bestScore = Math.max(score, bestScore);
-//                 }
-//             }
-//         }
-//         return bestScore;
-//     } else {
-//         let bestScore = Infinity;
-//         for (let i = 0; i < 3; i++) {
-//             for (let j = 0; j < 3; j++){
-//                 // Is the spot available?
-//                 if (board[i][j] == '') {
-//                     board[i][j] = human;
-//                     let score = minimax(board, depth + 1, true);
-//                     board[i][j] = '';
-//                    bestScore = Math.min(score, bestScore);
-//                 }
-//             }
-//         }
-//         return bestScore;
-
-//     }
-//     return 1;
-// }
-
-function bestMove() {
-    let available = [];
-    for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++){
-            if (board[i][j] === '') {
-                available.push({i , j});
-            }
-        }
+function restart(){
+  currentPlayerMark = 'X';
+  board = [
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', '']
+  ];
+  for(let i = 0; i < 3; i++) {
+    for(let j = 0; j < 3; j++){
+      DOMboard[i][j].dataset.mark = '';
+      DOMboard[i][j].innerText = '';
     }
+  }
+  for(let k = 0; k < squares.length; k++){
+    squares[k].dataset.mark = '';
+  }
+  gameOver = null;
+  turn = 0;
+  restartMod.classList.toggle('closed');
+  selectMod.classList.toggle('closed');
+}
 
-    console.log(available);
+function newGame() {
+  selectMod.classList.toggle('closed');
+  module.classList.toggle('closed');
+  console.log(scores, aiMark, playerMark);
+  if(currentPlayerMark === aiMark) {
+    let coord = bestMove();
+    aiMakesTurn(coord);
+  }
+}
 
-    let move = available[Math.floor(Math.random()*available.length)];
-    let i = move.i;
-    let j = move.j;
-
-    board[i][j] = ai;
-    domBoard[i][j].dataset.mark = ai;
-    domBoard[i][j].innerText = ai;
-    currentPlayer = human;
-
-    console.log(board);
-
-    gameOver = checkWinner();
-
-    if(gameOver === null) {
-        currentPlayer = ai;
-    } else {
-        console.log(`Looks like ${gameOver} wins!`);
-        reset();
-    }
+function selectMark(id) {
+  playerMark = id;
+  aiMark = playerMark === 'X' ? 'O' : 'X';
+  scores = {tie: 0};
+  scores[aiMark] = 10;
+  scores[playerMark] = -10;
+  console.log(scores, aiMark, playerMark);
+  newGame();
 }
