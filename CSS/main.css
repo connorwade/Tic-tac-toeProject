@@ -12,22 +12,41 @@ body, html {
 body {
   font-size: 15px;
   color: white;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Nunito', sans-serif;
+  overflow: hidden;
+  padding-top: 12px;
 }
 
 .module {
   position: absolute;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.9);
   z-index: 1;
   height: 100vh;
   width: 100vw;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  top: 0;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
   padding: 8px;
+}
+
+@media (min-width: 501px) and (max-width: 1199px) {
+  .module {
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+}
+
+@media (min-width: 1200px) {
+  .module {
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
 }
 
 .module .module-content {
@@ -36,9 +55,56 @@ body {
   top: 75%;
 }
 
+@media (min-width: 501px) and (max-width: 1199px) {
+  .module .module-content {
+    position: static;
+  }
+}
+
+@media (min-width: 1200px) {
+  .module .module-content {
+    position: static;
+  }
+}
+
 .module .module-content h1 {
   text-align: center;
   margin-bottom: 24px;
+}
+
+@media (min-width: 1200px) {
+  .module .module-content h1 {
+    font-size: 3rem;
+  }
+}
+
+@media (min-width: 501px) and (max-width: 1199px) {
+  .module .module-content h1 {
+    font-size: 3rem;
+  }
+}
+
+.module .login input {
+  padding: 12px;
+  border-radius: 10px;
+  background-color: lightgreen;
+  color: green;
+}
+
+.module .login input::-webkit-input-placeholder {
+  color: green;
+}
+
+.module .login input:-ms-input-placeholder {
+  color: green;
+}
+
+.module .login input::-ms-input-placeholder {
+  color: green;
+}
+
+.module .login input::placeholder {
+  color: green;
 }
 
 .closed {
@@ -49,8 +115,10 @@ main {
   height: 100%;
   width: 100%;
   max-height: 500px;
-  border-radius: 10px;
+  max-width: 500px;
+  border-radius: 13px;
   background-color: aqua;
+  margin: 0 auto;
   display: -ms-grid;
   display: grid;
   -ms-grid-rows: (1fr)[3];
@@ -58,6 +126,20 @@ main {
   -ms-grid-columns: (1fr)[3];
       grid-template-columns: repeat(3, 1fr);
       grid-template-areas: "1", "2", "3", "4", "5", "6", "7", "8", "9";
+}
+
+@media (min-width: 501px) and (max-width: 1199px) {
+  main {
+    margin-top: 10%;
+  }
+}
+
+@media (min-width: 1200px) {
+  main {
+    max-height: 650px;
+    max-width: 650px;
+    margin-top: 24px;
+  }
 }
 
 main div {
@@ -73,8 +155,20 @@ main div {
           justify-content: center;
   border: 1px solid black;
   border-radius: 5px;
-  -webkit-transition: .5s;
-  transition: .5s;
+  -webkit-transition: .2s;
+  transition: .2s;
+}
+
+@media (min-width: 501px) and (max-width: 1199px) {
+  main div {
+    font-size: 5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  main div {
+    font-size: 8rem;
+  }
 }
 
 main div:active {
@@ -127,21 +221,46 @@ main:nth-child(n) {
 }
 
 button {
+  font-weight: bold;
   padding: 12px 24px;
   border-radius: 15px;
   background-color: lightgreen;
-  color: white;
+  color: green;
   border: 2px solid green;
-  -webkit-transition: .5s;
-  transition: .5s;
+  -webkit-transition: .2s;
+  transition: .2s;
   margin: 12px;
 }
 
 button:hover {
   background-color: green;
+  color: white;
 }
 
 button:active {
-  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+
+#player-info {
+  max-width: 500px;
+  margin: 0 auto;
+  margin-top: 24px;
+  color: black;
+  height: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+#player-info table {
+  text-align: center;
+}
+
+#player-info table th, #player-info table td {
+  border-bottom: 1px solid #ddd;
 }
 /*# sourceMappingURL=main.css.map */

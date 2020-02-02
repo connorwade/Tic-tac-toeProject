@@ -1,4 +1,4 @@
-//Variables
+//Variables-------------------------------------
 
 //module
 const module = document.getElementById('module');
@@ -19,6 +19,40 @@ let turn = 0;
 let playerMark, aiMark, scores;
 let currentPlayerMark = 'X';
 
+//local storage & register
+const submitPlayer = document.getElementById('submit-player');
+const playerId = document.getElementById('playerId');
+const loginMod = document.getElementById('login-module');
+const welcome = document.getElementById('welcome');
+const resetPlayer = document.getElementById('resetPlayer');
+const xRecord = document.getElementsByClassName('X');
+const oRecord = document.getElementsByClassName('O');
+
+let player;
+const localKey = 'Tic-tac-toe';
+let storedData = localStorage.getItem(localKey);
+if(storedData){
+  player = JSON.parse(storedData);
+  loginMod.classList.toggle('closed');
+  selectMod.classList.toggle('closed');
+  welcome.innerText = `Welcome back, ${player.id}`;
+  setRecord(player);
+} else{
+  player = {
+    X: {
+      wins: 0,
+      loses: 0,
+      ties: 0
+    },
+    O: {
+      wins: 0,
+      loses: 0,
+      ties: 0
+    },
+    id: null,
+  }
+}
+
 
 
 //board
@@ -34,7 +68,18 @@ let DOMboard = [
   [squares[6], squares[7], squares[8]]
 ]
 
-//events
+//Events----------------------------------------
+
+//submit player id
+submitPlayer.addEventListener('click', () => {
+  if(playerId.value !== '') {submitPlayerId()}
+}); //submits user input when the button is pressed
+playerId.addEventListener('keyup', (e) => {
+  if(e.keyCode === 13){
+    if(playerId.value !== '') {submitPlayerId()}
+  }
+}); //submits user input when spacebar is hit
+
 //square being clicked
 for (let i = 0; i < squares.length; i++) {
   let square = squares[i];
@@ -44,55 +89,64 @@ for (let i = 0; i < squares.length; i++) {
       squareClick(e.target);
     }
   );
-} 
+} //adds event listeners for all squares
 
 //restart
 restartBtn.addEventListener('click', () => {
   restart();
-});
+}); //restarts and resets the game when pressed
 
 //select buttons
 selectX.addEventListener('click', ()=>{
   selectMark(selectX.id);
-});
+}); //allows user to choose the X mark for the game
 
 selectO.addEventListener('click', ()=>{
   selectMark(selectO.id);
-});
+}); //allows user to choose the O mark for the game
 
-//functions
+//reset player
+resetPlayer.addEventListener('click', () => {
+  localStorage.removeItem(localKey);
+  window.location.reload();
+}); //allows the user to clear the local storage and refresh the page
+
+//Functions---------------------------------------
 
 function squareClick(targetedEl){
   if (targetedEl.dataset.mark === "" && gameOver === null) {
       updateSquares(parseInt(targetedEl.id), currentPlayerMark);
     }
-}
+} //checks the data coming in from the square element to ensure proper functionality before updating
 
 function updateSquares(id, currentMark){
   squares[id].dataset.mark = currentMark;
   squares[id].innerText = currentMark;
   board[squares[id].dataset.row][squares[id].dataset.col] = currentMark;  
   endTurn();
-}
+} //updates all data for the square and moves the game to the end of turn
 
 function endTurn(){
   currentPlayerMark = currentPlayerMark === 'X' ? 'O' : 'X';
   gameOver = checkWinner();
   if(!gameOver && currentPlayerMark === aiMark) {
-    //let coord = selectMove();
     let coord = bestMove();
     aiMakesTurn(coord);
   } else if(gameOver) {
     endGame();
   }
   turn++;
-}
+} /*endTurn has several functions:
+  (1) It changes the current active mark
+  (2) It checks to see if the game has been won
+  (3) It checks to see if it is the ai's turn
+  (4) If it is the ai's turn it starts it*/
 
 function aiMakesTurn(obj){
   let el = DOMboard[obj.i][obj.j];
   let elId = parseInt(el.id);
   updateSquares(elId, currentPlayerMark);
-}
+} //gets ai decision data into the form used by the human player for code resusability
 
 function bestMove() {
   // AI to make its turn
@@ -115,7 +169,7 @@ function bestMove() {
     }
   }
   return move;
-}
+} //allows the ai to start to make a decision
 
 function minimax(board, depth, a, b, isMaximizing) {
   let result = checkWinner();
@@ -156,29 +210,12 @@ function minimax(board, depth, a, b, isMaximizing) {
     }
     return bestScore;
   }
-}
-
-
-function selectMove() {
-  let available = availableMoves();
-  return available[Math.floor(Math.random() * available.length)];
-}
-
-function availableMoves() {
-  let availArr = [];
-  for (let i = 0; i < 3; i++) {
-    for (let j = 0; j < 3; j++) {
-      if (board[i][j] === "") {
-        availArr.push({ i, j });
-      }
-    }
-  }
-  return availArr;
-}
+} //minimax formula with alpha-beta trimming
+//guides decision making of the ai
 
 function equals3(a, b, c) {
-  return a == b && b == c && a !== "";
-}
+  return a === b && b === c && a !== "";
+}//checks if three variables are equal, but also that they are not empty
 
 function checkWinner() {
   let winner = null;
@@ -235,7 +272,7 @@ function checkWinner() {
   } else {
     return winner;
   }
-}
+} //uses equals3 to evaluate if anyone has won the game or if it has come out as a tie
 
 function endGame() {
   if(gameOver !== 'tie'){
@@ -245,7 +282,16 @@ function endGame() {
   }
   module.classList.toggle('closed');
   restartMod.classList.toggle('closed');
-}
+  if(playerMark === gameOver){
+    player[playerMark].wins++;
+  } else if (aiMark === gameOver){
+    player[playerMark].loses++;
+  } else{
+    player[playerMark].ties++;
+  }
+  setRecord(player);
+  localStorage.setItem(localKey, JSON.stringify(player));
+} //endGame updates local storage files and displays the next DOM elements for the player
 
 function restart(){
   currentPlayerMark = 'X';
@@ -267,17 +313,16 @@ function restart(){
   turn = 0;
   restartMod.classList.toggle('closed');
   selectMod.classList.toggle('closed');
-}
+} //restart ensures that all variables are reset for a new game
 
 function newGame() {
   selectMod.classList.toggle('closed');
   module.classList.toggle('closed');
-  console.log(scores, aiMark, playerMark);
   if(currentPlayerMark === aiMark) {
     let coord = bestMove();
     aiMakesTurn(coord);
   }
-}
+} //newGame ensures that the ai will go first if it is X
 
 function selectMark(id) {
   playerMark = id;
@@ -285,6 +330,23 @@ function selectMark(id) {
   scores = {tie: 0};
   scores[aiMark] = 10;
   scores[playerMark] = -10;
-  console.log(scores, aiMark, playerMark);
+  welcome.innerText = '';
   newGame();
-}
+}//selectmark is the first function that runs in a new game
+//ensures that all mark variables belong to the correct player
+
+function submitPlayerId(){
+  player.id = playerId.value;
+  loginMod.classList.toggle('closed');
+  selectMod.classList.toggle('closed');
+} //Player id is updated with this function
+
+function setRecord(obj) {
+  xRecord[0].innerText = obj.X.wins;
+  xRecord[1].innerText = obj.X.loses;
+  xRecord[2].innerText = obj.X.ties;
+
+  oRecord[0].innerText = obj.O.wins;
+  oRecord[1].innerText = obj.O.loses;
+  oRecord[2].innerText = obj.O.ties;
+} //ensures that the player's stats are recorded properly in the DOM
