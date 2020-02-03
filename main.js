@@ -19,14 +19,15 @@ let turn = 0;
 let playerMark, aiMark, scores;
 let currentPlayerMark = 'X';
 
+//mustache
+const template = document.getElementById('template').innerHTML;
+
 //local storage & register
 const submitPlayer = document.getElementById('submit-player');
 const playerId = document.getElementById('playerId');
 const loginMod = document.getElementById('login-module');
 const welcome = document.getElementById('welcome');
 const resetPlayer = document.getElementById('resetPlayer');
-const xRecord = document.getElementsByClassName('X');
-const oRecord = document.getElementsByClassName('O');
 
 let player;
 const localKey = 'Tic-tac-toe';
@@ -52,7 +53,6 @@ if(storedData){
     id: null,
   }
 }
-
 
 
 //board
@@ -342,11 +342,6 @@ function submitPlayerId(){
 } //Player id is updated with this function
 
 function setRecord(obj) {
-  xRecord[0].innerText = obj.X.wins;
-  xRecord[1].innerText = obj.X.loses;
-  xRecord[2].innerText = obj.X.ties;
-
-  oRecord[0].innerText = obj.O.wins;
-  oRecord[1].innerText = obj.O.loses;
-  oRecord[2].innerText = obj.O.ties;
+  let rendered = Mustache.render(template, obj);
+  document.getElementById('target').innerHTML = rendered;
 } //ensures that the player's stats are recorded properly in the DOM
