@@ -1,83 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="./CSS/main.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      href="https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Tic_tac_toe.svg/2000px-Tic_tac_toe.svg.png"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.1.0/mustache.min.js"></script>
+    <script src="./src/app.js" type="module"></script>
+    <title>Tic-Tac-Toe</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="./CSS/main.css">
-  <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
-  <link rel="icon"
-    href="https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Tic_tac_toe.svg/2000px-Tic_tac_toe.svg.png">
-  <title>Tic-Tac-Toe</title>
-</head>
+  <body>
+    <section class="module" id="module">
+      <div class="module-content login" id="login-module">
+        <h1>Choose Player ID</h1>
+        <input
+          type="text"
+          maxlength="16"
+          pattern="[a-zA-Z0-9]{1, 16}"
+          placeholder="Up to 16 characters"
+          id="playerId"
+        />
 
-<body>
+        <button id="submit-player">Submit</button>
+      </div>
 
-  <section class="module" id="module">
-    <div class="module-content login" id="login-module">
-      <h1>Choose Player ID</h1>
-      <input type="text" 
-      maxlength="16" 
-      pattern="[a-zA-Z0-9]{1, 16}" 
-      placeholder="Up to 16 characters" 
-      id="playerId">
-      
-      <button id="submit-player">Submit</button>
-    </div>
-    <div class="module-content restart closed" id="restart-module">
-      <h1 id="game-over-text"></h1>
-      <button id="restart">Restart</button>
-    </div>
-    <div class="module-content choose closed" id="selection-module">
-      <h1 id="welcome"></h1>
-      <h1>Select your mark!</h1>
-      <button id="X">Select X</button>
-      <button id="O">Select O</button>
-    </div>
-  </section>
+      <div class="module-content restart closed" id="restart-module">
+        <h1 id="game-over-text"></h1>
+        <button id="restart">Restart</button>
+      </div>
 
-  <main id="board">
-    <div class="square" id="0" data-mark="" data-row="0" data-col="0"></div>
-    <div class="square" id="1" data-mark="" data-row="0" data-col="1"></div>
-    <div class="square" id="2" data-mark="" data-row="0" data-col="2"></div>
-    <div class="square" id="3" data-mark="" data-row="1" data-col="0"></div>
-    <div class="square" id="4" data-mark="" data-row="1" data-col="1"></div>
-    <div class="square" id="5" data-mark="" data-row="1" data-col="2"></div>
-    <div class="square" id="6" data-mark="" data-row="2" data-col="0"></div>
-    <div class="square" id="7" data-mark="" data-row="2" data-col="1"></div>
-    <div class="square" id="8" data-mark="" data-row="2" data-col="2"></div>
-  </main>
+      <div class="module-content choose closed" id="selection-module">
+        <h1 id="welcome"></h1>
+        <h1>Select your mark!</h1>
+        <button id="X">Select X</button>
+        <button id="O">Select O</button>
+      </div>
+    </section>
 
-  <section id="player-info">
-    <button id="resetPlayer">Reset Player Info</button>
-    <table id="target">
-    </table>
-  </section>
+    <main id="board">
+      <div class="square" id="0" data-mark="" data-row="0" data-col="0"></div>
+      <div class="square" id="1" data-mark="" data-row="0" data-col="1"></div>
+      <div class="square" id="2" data-mark="" data-row="0" data-col="2"></div>
+      <div class="square" id="3" data-mark="" data-row="1" data-col="0"></div>
+      <div class="square" id="4" data-mark="" data-row="1" data-col="1"></div>
+      <div class="square" id="5" data-mark="" data-row="1" data-col="2"></div>
+      <div class="square" id="6" data-mark="" data-row="2" data-col="0"></div>
+      <div class="square" id="7" data-mark="" data-row="2" data-col="1"></div>
+      <div class="square" id="8" data-mark="" data-row="2" data-col="2"></div>
+    </main>
 
-  <script id="template" type="x-tmpl-mustache">
-    <tr>
-      <th></th>
-      <th>Wins</th>
-      <th>Loses</th>
-      <th>Ties</th>
-    </tr>
-    <tr>
-      <td>X's</td>
-      <td class='X'> {{X.wins}} </td>
-      <td class='X'> {{X.loses}} </td>
-      <td class='X'> {{X.ties}} </td>
-    </tr>
-    <tr>
-      <td>O's</td>
-      <td class='O'> {{O.wins}} </td>
-      <td class='O'> {{O.loses}} </td>
-      <td class='O'> {{O.ties}} </td>
-    </tr>
-</script>
+    <section id="player-info">
+      <button id="resetPlayer">Reset Player Info</button>
+      <table id="target"></table>
+    </section>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.1.0/mustache.min.js"></script>
-  <script src="main.js"></script>
-</body>
-
+    <script id="template" type="x-tmpl-mustache">
+      <tr>
+        <th></th>
+        <th>Wins</th>
+        <th>Loses</th>
+        <th>Ties</th>
+      </tr>
+      <tr>
+        <td>X's</td>
+        <td class='X'> {{X.wins}} </td>
+        <td class='X'> {{X.loses}} </td>
+        <td class='X'> {{X.ties}} </td>
+      </tr>
+      <tr>
+        <td>O's</td>
+        <td class='O'> {{O.wins}} </td>
+        <td class='O'> {{O.loses}} </td>
+        <td class='O'> {{O.ties}} </td>
+      </tr>
+    </script>
+  </body>
 </html>
