@@ -2,22 +2,23 @@
   padding: 0;
   margin: 0;
   -webkit-box-sizing: border-box;
-          box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-body, html {
+body,
+html {
   height: 100%;
 }
 
 body {
   font-size: 15px;
   color: white;
-  font-family: 'Nunito', sans-serif;
+  font-family: "Nunito", sans-serif;
   overflow: hidden;
   padding-top: 12px;
 }
 
-.module {
+.modal {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.9);
   z-index: 1;
@@ -28,82 +29,82 @@ body {
   display: flex;
   top: 0;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   padding: 8px;
 }
 
 @media (min-width: 501px) and (max-width: 1199px) {
-  .module {
+  .modal {
     -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
   }
 }
 
 @media (min-width: 1200px) {
-  .module {
+  .modal {
     -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
   }
 }
 
-.module .module-content {
+.modal .modal-content {
   text-align: center;
   position: relative;
   top: 75%;
 }
 
 @media (min-width: 501px) and (max-width: 1199px) {
-  .module .module-content {
+  .modal .modal-content {
     position: static;
   }
 }
 
 @media (min-width: 1200px) {
-  .module .module-content {
+  .modal .modal-content {
     position: static;
   }
 }
 
-.module .module-content h1 {
+.modal .modal-content h1 {
   text-align: center;
   margin-bottom: 24px;
 }
 
 @media (min-width: 1200px) {
-  .module .module-content h1 {
+  .modal .modal-content h1 {
     font-size: 3rem;
   }
 }
 
 @media (min-width: 501px) and (max-width: 1199px) {
-  .module .module-content h1 {
+  .modal .modal-content h1 {
     font-size: 3rem;
   }
 }
 
-.module .login input {
+.modal .login input {
   padding: 12px;
   border-radius: 10px;
   background-color: lightgreen;
   color: green;
 }
 
-.module .login input::-webkit-input-placeholder {
+.modal .login input::-webkit-input-placeholder {
   color: green;
 }
 
-.module .login input:-ms-input-placeholder {
+.modal .login input:-ms-input-placeholder {
   color: green;
 }
 
-.module .login input::-ms-input-placeholder {
+.modal .login input::-ms-input-placeholder {
   color: green;
 }
 
-.module .login input::placeholder {
+.modal .login input::placeholder {
   color: green;
 }
 
@@ -121,11 +122,11 @@ main {
   margin: 0 auto;
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: (1fr)[3];
-      grid-template-rows: repeat(3, 1fr);
-  -ms-grid-columns: (1fr)[3];
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-areas: "1", "2", "3", "4", "5", "6", "7", "8", "9";
+  -ms-grid-rows: (1fr) [3];
+  grid-template-rows: repeat(3, 1fr);
+  -ms-grid-columns: (1fr) [3];
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: "1", "2", "3", "4", "5", "6", "7", "8", "9";
 }
 
 @media (min-width: 501px) and (max-width: 1199px) {
@@ -148,15 +149,15 @@ main div {
   display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   border: 1px solid black;
   border-radius: 5px;
-  -webkit-transition: .2s;
-  transition: .2s;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
 }
 
 @media (min-width: 501px) and (max-width: 1199px) {
@@ -227,8 +228,8 @@ button {
   background-color: lightgreen;
   color: green;
   border: 2px solid green;
-  -webkit-transition: .2s;
-  transition: .2s;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
   margin: 12px;
 }
 
@@ -252,15 +253,16 @@ button:active {
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
 }
 
 #player-info table {
   text-align: center;
 }
 
-#player-info table th, #player-info table td {
+#player-info table th,
+#player-info table td {
   border-bottom: 1px solid #ddd;
 }
 /*# sourceMappingURL=main.css.map */
