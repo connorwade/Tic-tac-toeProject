@@ -1,13 +1,15 @@
 //Variables-------------------------------------
 
-//module
-const module = document.getElementById("module");
+//modal
+const modal = document.getElementById("modal");
 //restart
 const gameOverText = document.getElementById("game-over-text");
-const restartMod = document.getElementById("restart-module");
+const restartBtn = document.getElementById("restart");
+const restartMod = document.getElementById("restart-modal");
 //newGame
-
-const selectMod = document.getElementById("selection-module");
+const selectX = document.getElementById("X");
+const selectO = document.getElementById("O");
+const selectMod = document.getElementById("selection-modal");
 
 //game
 let gameOver = null;
@@ -17,17 +19,26 @@ let turn = 0;
 let playerMark, aiMark, scores;
 let currentPlayerMark = "X";
 
-//mustache
-const template = document.getElementById("template").innerHTML;
+//records
+const xRecords = {
+  wins: document.querySelector(".X_wins"),
+  loses: document.querySelector(".X_loses"),
+  ties: document.querySelector(".X_ties"),
+};
+const oRecords = {
+  wins: document.querySelector(".O_wins"),
+  loses: document.querySelector(".O_loses"),
+  ties: document.querySelector(".O_ties"),
+};
 
 //local storage & register
-
-const loginMod = document.getElementById("login-module");
+const submitPlayer = document.getElementById("submit-player");
+const playerId = document.getElementById("playerId");
+const loginMod = document.getElementById("login-modal");
 const welcome = document.getElementById("welcome");
 const resetPlayer = document.getElementById("resetPlayer");
 
 let player;
-
 const localKey = "Tic-tac-toe";
 let storedData = localStorage.getItem(localKey);
 if (storedData) {
@@ -52,6 +63,57 @@ if (storedData) {
   };
 }
 
+//board
+const squares = document.getElementsByClassName("square");
+let board = [
+  ["", "", ""],
+  ["", "", ""],
+  ["", "", ""],
+];
+let DOMboard = [
+  [squares[0], squares[1], squares[2]],
+  [squares[3], squares[4], squares[5]],
+  [squares[6], squares[7], squares[8]],
+];
+
+//Events----------------------------------------
+
+//submit player id
+submitPlayer.addEventListener("click", () => {
+  if (playerId.value !== "") {
+    submitPlayerId();
+  }
+}); //submits user input when the button is pressed
+playerId.addEventListener("keyup", (e) => {
+  if (e.keyCode === 13) {
+    if (playerId.value !== "") {
+      submitPlayerId();
+    }
+  }
+}); //submits user input when spacebar is hit
+
+//square being clicked
+for (let i = 0; i < squares.length; i++) {
+  let square = squares[i];
+  square.addEventListener("click", (e) => {
+    squareClick(e.target);
+  });
+} //adds event listeners for all squares
+
+//restart
+restartBtn.addEventListener("click", () => {
+  restart();
+}); //restarts and resets the game when pressed
+
+//select buttons
+selectX.addEventListener("click", () => {
+  selectMark(selectX.id);
+}); //allows user to choose the X mark for the game
+
+selectO.addEventListener("click", () => {
+  selectMark(selectO.id);
+}); //allows user to choose the O mark for the game
+
 //reset player
 resetPlayer.addEventListener("click", () => {
   localStorage.removeItem(localKey);
@@ -59,6 +121,12 @@ resetPlayer.addEventListener("click", () => {
 }); //allows the user to clear the local storage and refresh the page
 
 //Functions---------------------------------------
+
+function squareClick(targetedEl) {
+  if (targetedEl.dataset.mark === "" && gameOver === null) {
+    updateSquares(parseInt(targetedEl.id), currentPlayerMark);
+  }
+} //checks the data coming in from the square element to ensure proper functionality before updating
 
 function updateSquares(id, currentMark) {
   squares[id].dataset.mark = currentMark;
@@ -215,7 +283,7 @@ function endGame() {
   } else {
     gameOverText.innerText = `Congrats on the tie, you mediocre beast!`;
   }
-  module.classList.toggle("closed");
+  modal.classList.toggle("closed");
   restartMod.classList.toggle("closed");
   if (playerMark === gameOver) {
     player[playerMark].wins++;
@@ -252,7 +320,7 @@ function restart() {
 
 function newGame() {
   selectMod.classList.toggle("closed");
-  module.classList.toggle("closed");
+  modal.classList.toggle("closed");
   if (currentPlayerMark === aiMark) {
     let coord = bestMove();
     aiMakesTurn(coord);
@@ -270,13 +338,18 @@ function selectMark(id) {
 } //selectmark is the first function that runs in a new game
 //ensures that all mark variables belong to the correct player
 
-function setRecord(obj) {
-  let rendered = Mustache.render(template, obj);
-  document.getElementById("target").innerHTML = rendered;
-} //ensures that the player's stats are recorded properly in the DOM
+function submitPlayerId() {
+  player.id = playerId.value;
+  loginMod.classList.toggle("closed");
+  selectMod.classList.toggle("closed");
+} //Player id is updated with this function
 
-function squareClick(targetedEl) {
-  if (targetedEl.dataset.mark === "" && gameOver === null) {
-    updateSquares(parseInt(targetedEl.id), currentPlayerMark);
-  }
-} //checks the data coming in from the square element to ensure proper functionality before updating
+function setRecord(obj) {
+  xRecords.wins.textContent = obj.X.wins;
+  xRecords.loses.textContent = obj.X.loses;
+  xRecords.ties.textContent = obj.X.ties;
+
+  oRecords.wins.textContent = obj.O.wins;
+  oRecords.loses.textContent = obj.O.loses;
+  oRecords.ties.textContent = obj.O.ties;
+} //ensures that the player's stats are recorded properly in the DOM

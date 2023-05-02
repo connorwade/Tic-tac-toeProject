@@ -13,19 +13,18 @@
       rel="icon"
       href="https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Tic_tac_toe.svg/2000px-Tic_tac_toe.svg.png"
     />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.1.0/mustache.min.js"></script>
-    <script src="./src/app.js" type="module"></script>
+    <script src="./src/app.js" type="modal" defer></script>
     <title>Tic-Tac-Toe</title>
   </head>
 
   <body>
-    <section class="module" id="module">
-      <div class="module-content login" id="login-module">
+    <section class="modal" id="modal">
+      <div class="modal-content login" id="login-modal">
         <h1>Choose Player ID</h1>
         <input
           type="text"
           maxlength="16"
-          pattern="[a-zA-Z0-9]{1, 16}"
+          pattern="[a-zA-Z0-9]{1,16}"
           placeholder="Up to 16 characters"
           id="playerId"
         />
@@ -33,12 +32,12 @@
         <button id="submit-player">Submit</button>
       </div>
 
-      <div class="module-content restart closed" id="restart-module">
+      <div class="modal-content restart closed" id="restart-modal">
         <h1 id="game-over-text"></h1>
         <button id="restart">Restart</button>
       </div>
 
-      <div class="module-content choose closed" id="selection-module">
+      <div class="modal-content choose closed" id="selection-modal">
         <h1 id="welcome"></h1>
         <h1>Select your mark!</h1>
         <button id="X">Select X</button>
@@ -63,25 +62,27 @@
       <table id="target"></table>
     </section>
 
-    <script id="template" type="x-tmpl-mustache">
-      <tr>
-        <th></th>
-        <th>Wins</th>
-        <th>Loses</th>
-        <th>Ties</th>
-      </tr>
-      <tr>
-        <td>X's</td>
-        <td class='X'> {{X.wins}} </td>
-        <td class='X'> {{X.loses}} </td>
-        <td class='X'> {{X.ties}} </td>
-      </tr>
-      <tr>
-        <td>O's</td>
-        <td class='O'> {{O.wins}} </td>
-        <td class='O'> {{O.loses}} </td>
-        <td class='O'> {{O.ties}} </td>
-      </tr>
-    </script>
+    <div id="player-info">
+      <table>
+        <tr>
+          <th></th>
+          <th>Wins</th>
+          <th>Loses</th>
+          <th>Ties</th>
+        </tr>
+        <tr>
+          <td>X's</td>
+          <td class="X_wins">0</td>
+          <td class="X_loses">0</td>
+          <td class="X_ties">0</td>
+        </tr>
+        <tr>
+          <td>O's</td>
+          <td class="O_wins">0</td>
+          <td class="O_loses">0</td>
+          <td class="O_ties">0</td>
+        </tr>
+      </table>
+    </div>
   </body>
 </html>
